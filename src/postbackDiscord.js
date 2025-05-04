@@ -1,10 +1,34 @@
 import 'dotenv/config';
 
+export function sendMessageOffline(service) {
+    const message = `🆘 O helthcheck detectou que o serviço está offline.\nVerifique em:\n ${service.urlHelp}`;
+
+    sendMessageFromDiscord(
+        service.name,
+        new Date().toISOString,
+        message,
+        service.urlPing,
+        service.urlIcon
+    );
+}
+
+export function sendMessageOnline(service) {
+    const message = `✅ O helthcheck detectou que o serviço está online novamente.`;
+
+    sendMessageFromDiscord(
+        service.name,
+        new Date().toISOString,
+        message,
+        service.urlPing,
+        service.urlIcon
+    );
+}
+
 export function sendMessageFromDiscord(
     serviceName,
     dateTime,
+    description,
     urlPing,
-    urlHelp,
     urlIcon
 ) {
     const webhookUrl = process.env.DISCORD_WEBHOOK;
@@ -14,7 +38,7 @@ export function sendMessageFromDiscord(
         embeds: [
             {
                 title: serviceName,
-                description: `❌ O servidor de helthcheck detectou que o serviço está offline.\nVerifique em:\n ${urlHelp}`,
+                description: description,
                 color: 5814783,
                 fields: [
                     {

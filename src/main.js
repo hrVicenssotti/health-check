@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { sendMessageFromDiscord } from './postbackDiscord.js';
+import { sendMessageOffline, sendMessageOnline } from './postbackDiscord.js';
 
 const services = [
     // {
@@ -49,11 +49,19 @@ async function start() {
             }
 
             try {
-                await fetch(service.urlPing);
+                await fetch(service.urlPing)
+                    .then((r) => r.text())
+                    .then((b) => {
+                        if (!b.includes('pong')) {
+                            throw new Error();
+                        }
+                    });
 
                 if (!service.online) {
                     services[i].online = true;
                     services[i].isSended = false;
+
+                    sendMessageOnline(service);
                 }
             } catch (e) {
                 if (service.online) {
@@ -63,13 +71,7 @@ async function start() {
                 if (!service.isSended) {
                     services[i].isSended = true;
 
-                    sendMessageFromDiscord(
-                        service.name,
-                        new Date().toISOString(),
-                        service.urlPing,
-                        service.urlHelp,
-                        service.urlIcon
-                    );
+                    sendMessageOffline(service);
                 }
             }
 
