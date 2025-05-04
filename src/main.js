@@ -39,6 +39,8 @@ async function sleep(seconds) {
 }
 
 async function start() {
+    console.log('Initializing check service');
+
     while (true) {
         for (const i in services) {
             services[i].remainingTime -= 1;
@@ -77,6 +79,8 @@ async function start() {
 
             services[i].remainingTime = service.remainingTimeBase;
         }
+
+        console.log('checking');
 
         await sleep(10);
     }
