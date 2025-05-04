@@ -5,7 +5,7 @@ export function sendMessageOffline(service) {
 
     sendMessageFromDiscord(
         service.name,
-        new Date().toISOString,
+        new Date().toISOString(),
         message,
         service.urlPing,
         service.urlIcon
@@ -17,7 +17,7 @@ export function sendMessageOnline(service) {
 
     sendMessageFromDiscord(
         service.name,
-        new Date().toISOString,
+        new Date().toISOString(),
         message,
         service.urlPing,
         service.urlIcon
